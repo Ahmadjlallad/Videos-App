@@ -11,24 +11,37 @@ class VideoApp extends React.Component {
       params: {
         q: term,
       },
-    }).then((Response) => this.setState({ videos: Response }));
+    }).then((Response) =>
+      this.setState({ videos: Response, selectedVideo: Response.data.items[0] })
+    );
   };
   onVideoSelect = (selected) => {
-    const newSelectedVideo = this.state.videos.data.items.find(
-      (video) => selected === video.snippet.title
-    );
-    this.setState({ selectedVideo: newSelectedVideo });
-    console.log(newSelectedVideo);
+    // const newSelectedVideo = this.state.videos.data.items.find(
+    //   (video) => selected === video.snippet.title
+    // );
+    this.setState({ selectedVideo: selected });
+    // console.log(newSelectedVideo);
   };
+  componentDidMount() {
+    this.onTermSubmit("react");
+  }
   render() {
     return (
       <div className="App-main--div ui container">
         <SearchBar onFormSubmit={this.onTermSubmit} />
-        <VideoDetail video={this.state.selectedVideo} />
-        <VideoList
-          videos={this.state.videos}
-          onVideoSelect={this.onVideoSelect}
-        />
+        <div className="ui grid">
+          <div className="ui row">
+            <div className="eleven wide column">
+              <VideoDetail video={this.state.selectedVideo} />
+            </div>
+            <div className="five wide column">
+              <VideoList
+                videos={this.state.videos}
+                onVideoSelect={this.onVideoSelect}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
